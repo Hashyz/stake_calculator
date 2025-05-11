@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIP Rank Calculator</title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        :root {
+    --bg-color-light: #f5f5f5;
+    --text-color-light: #333;
+    --container-bg-light: #ffffff;
+    --input-bg-light: #f0f0f0;
+    --button-bg-light: linear-gradient(45deg, #6dd5ed, #2193b0);
+
+    --bg-color-dark: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+    --text-color-dark: #fff;
+    --container-bg-dark: rgba(255, 255, 255, 0.05);
+    --input-bg-dark: rgba(255,255,255,0.1);
+    --button-bg-dark: linear-gradient(45deg, #ff6ec4, #7873f5);
+}
+
+html[data-theme='light'] body {
+    background: var(--bg-color-light);
+    color: var(--text-color-light);
+}
+html[data-theme='light'] .container {
+    background: var(--container-bg-light);
+    color: var(--text-color-light);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+html[data-theme='light'] input, html[data-theme='light'] select {
+    background: var(--input-bg-light);
+    color: var(--text-color-light);
+}
+html[data-theme='light'] .result p {
+    color: var(--text-color-light);
+}
+html[data-theme='light'] button.theme-toggle {
+    background: #eee;
+    color: #333;
+}
+html[data-theme='light'] button {
+    background: var(--button-bg-light);
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--bg-color-dark);
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: var(--text-color-dark);
+}
+.container {
+    background: var(--container-bg-dark);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 40px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.2);
+    animation: fadeIn 1s ease-in-out;
+}
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(20px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 700;
+}
+label {
+    display: block;
+    margin: 15px 0 5px;
+    font-weight: 500;
+}
+input, select {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    outline: none;
+    background: var(--input-bg-dark);
+    color: var(--text-color-dark);
+    font-size: 14px;
+}
+input::placeholder {
+    color: #bbb;
+}
+button {
+    margin-top: 25px;
+    width: 100%;
+    padding: 14px;
+    border: none;
+    background: var(--button-bg-dark);
+    color: white;
+    font-size: 16px;
+    border-radius: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+button:hover {
+    transform: scale(1.05);
+}
+.result {
+    margin-top: 25px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    padding: 20px;
+    font-size: 14px;
+}
+.result span {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+.result p {
+    margin: 0 0 10px;
+    color: #e0e0e0;
+}
+.progress-bar-container {
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    height: 20px;
+    margin-top: 10px;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
+}
+.progress-bar {
+    background: linear-gradient(90deg, #00c6ff, #0072ff);
+    height: 100%;
+    width: 0%;
+    transition: width 0.5s ease-in-out;
+}
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(255,255,255,0.1);
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    color: white;
+    transition: background 0.3s;
+    z-index: 1000;
+}
+.theme-toggle:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 25px;
+        max-width: 100%;
+    }
+    input, select {
+        font-size: 16px;
+    }
+    .result {
+        padding: 15px;
+    }
+}
+
+.watermark {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    font-size: 12px;
+    opacity: 0.3;
+    color: #ffffff;
+    z-index: 500;
+    pointer-events: none;
+    font-weight: bold;
+}
+
+.credit {
+    margin-top: 30px;
+    font-size: 12px;
+    text-align: center;
+    opacity: 0.5;
+}
+.credit a {
+    color: inherit;
+    text-decoration: none;
+    font-weight: bold;
+}
+    </style>
+</head>
+<body>
+    <div class="watermark">© Created by hyz XD</div>
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon" id="theme-icon"></i>
+    </button>
+    <div class="container">
+        <h2>🌟 VIP Rank Calculator 🌟</h2>
+        <label for="vip_Progress">VIP Progress (%)</label>
+        <input type="text" id="vip_Progress" placeholder="e.g., 45.5">
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <label for="current_rank">Current VIP Rank</label>
+        <select id="current_rank">
+            <option>Non VIP</option>
+            <option>Bronze</option>
+            <option>Silver</option>
+            <option>Gold</option>
+            <option>Platinum I</option>
+            <option>Platinum II</option>
+            <option>Platinum III</option>
+            <option>Platinum IV</option>
+            <option>Platinum V</option>
+            <option>Platinum VI</option>
+            <option>Diamond I</option>
+            <option>Diamond II</option>
+            <option>Diamond III</option>
+            <option>Diamond IV</option>
+            <option>Diamond V</option>
+            <option>Obsidian</option>
+        </select>
+
+        <div class="result">
+            <span>Next Rank:</span> <input type="text" id="result_next_rank" readonly>
+            <span>Sports Wager:</span> <input type="text" id="sport_wager" readonly>
+            <span>Casino Wager:</span> <input type="text" id="casino_wager" readonly>
+            <span>Bonus You Can Get:</span> <input type="text" id="bonus_amount" readonly>
+        </div>
+
+        <div class="result result_casino"></div>
+        <div class="result result_sports"></div>
+
+        <select id="vip__rank_currencies" style="display: none;">
+            <option data-currency_name="USD">USD</option>
+        </select>
+
+        <div class="credit">Made with ❤️ by <a href="#">hyz XD</a></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+<script>
+    const progressBar = document.getElementById("progressBar");
+const vipInput = document.getElementById("vip_Progress");
+const rankSelect = document.getElementById("current_rank");
+
+function updateProgressBar() {
+    const value = parseFloat(vipInput.value.replace(',', '.'));
+    if (!isNaN(value) && value >= 0 && value <= 100) {
+        progressBar.style.width = `${value}%`;
+    } else {
+        progressBar.style.width = `0%`;
+    }
+}
+
+function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute("data-theme");
+    const newTheme = currentTheme === "light" ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", newTheme);
+    localStorage.setItem("theme", newTheme);
+    document.getElementById("theme-icon").className = newTheme === "light" ? "fas fa-sun" : "fas fa-moon";
+}
+
+(function initTheme() {
+    const savedTheme = localStorage.getItem("theme") || "dark";
+    document.documentElement.setAttribute("data-theme", savedTheme);
+    document.getElementById("theme-icon").className = savedTheme === "light" ? "fas fa-sun" : "fas fa-moon";
+})();
+
+function vip_rank_calculate() {
+    var vipProgress = vipInput.value;
+    var currentRank = rankSelect.value;
+    var ranks = {
+        "Non VIP": 0,
+        "Bronze": 10000,
+        "Silver": 50000,
+        "Gold": 100000,
+        "Platinum I": 250000,
+        "Platinum II": 500000,
+        "Platinum III": 1000000,
+        "Platinum IV": 2500000,
+        "Platinum V": 5000000,
+        "Platinum VI": 10000000,
+        "Diamond I": 25000000,
+        "Diamond II": 50000000,
+        "Diamond III": 100000000,
+        "Diamond IV": 250000000,
+        "Diamond V": 500000000,
+        "Obsidian": 1000000000
+    };
+
+    var bonuses = [
+        20, 55, 110, 220, 440, 880,
+        1760, 3520, 7040, 14080,
+        28160, 56320, 112640, 225280,
+        450560
+    ];
+
+    var currentAmount = ranks[currentRank];
+    var currentIndex = Object.values(ranks).indexOf(currentAmount);
+    var nextRank = Object.keys(ranks)[currentIndex + 1];
+
+    if (!nextRank) {
+        document.getElementById('result_next_rank').value = "Max Rank";
+        document.getElementById('sport_wager').value = "";
+        document.getElementById('casino_wager').value = "";
+        document.getElementById('bonus_amount').value = "";
+        document.querySelector('.result_casino').innerHTML = `<span>Casino:</span><p>You have reached the highest VIP rank.</p>`;
+        document.querySelector('.result_sports').innerHTML = `<span>Sports:</span><p>You have reached the highest VIP rank.</p>`;
+        return;
+    }
+
+    var neededAmount = ranks[nextRank] - currentAmount;
+    var vipProgressFloat = parseFloat(vipProgress.replace(',', '.'));
+
+    if (isNaN(vipProgressFloat)) return;
+    if (vipProgressFloat > 100) {
+        alert("VIP Progress must not exceed 100%.");
+        return;
+    }
+
+    neededAmount = neededAmount * ((100 - vipProgressFloat) / 100);
+    var sports_wager = neededAmount / 3;
+    var casino_wager = neededAmount;
+
+    document.getElementById('sport_wager').value = sports_wager.toFixed();
+    document.getElementById('casino_wager').value = casino_wager.toFixed();
+    document.getElementById('result_next_rank').value = nextRank;
+
+    var bonus = bonuses[currentIndex] || "-";
+    document.getElementById('bonus_amount').value = bonus;
+
+    var selectedOption = document.querySelector('#vip__rank_currencies option[data-currency_name="USD"]');
+    selectedOption.selected = true;
+    document.querySelector('.result_casino').innerHTML = `<span>Casino:</span><p>${Math.round(casino_wager)} USD wager to reach ${nextRank}</p>`;
+    document.querySelector('.result_sports').innerHTML = `<span>Sports:</span><p>${Math.round(sports_wager)} USD wager to reach ${nextRank}</p>`;
+
+    saveInputs();
+}
+
+function saveInputs() {
+    localStorage.setItem("vipProgress", vipInput.value);
+    localStorage.setItem("currentRank", rankSelect.value);
+}
+
+function loadInputs() {
+    const savedProgress = localStorage.getItem("vipProgress");
+    const savedRank = localStorage.getItem("currentRank");
+
+    if (savedProgress !== null) {
+        vipInput.value = savedProgress;
+        updateProgressBar();
+    }
+
+    if (savedRank !== null) {
+        rankSelect.value = savedRank;
+    }
+
+    vip_rank_calculate();
+}
+
+vipInput.addEventListener("input", () => {
+    updateProgressBar();
+    vip_rank_calculate();
+});
+
+rankSelect.addEventListener("change", vip_rank_calculate);
+
+window.addEventListener("DOMContentLoaded", loadInputs);
+</script>
+</html>
